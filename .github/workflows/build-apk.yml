@@ -32,6 +32,26 @@ jobs:
           mkdir -p assets/images assets/icons
           echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" | base64 -d > assets/images/logo.png
 
+      - name: Fix Android icon resources
+        run: |
+          # 用最小 PNG 替換所有 mipmap 圖標，避免 adaptive-icon XML 問題
+          ICON_B64="iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAGklEQVRoge3BMQEAAADCoPVP7WsIoAAAeAMBxAABCz4MkQAAAABJRU5ErkJggg=="
+          for dir in android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi; do
+            mkdir -p "$dir"
+            echo "$ICON_B64" | base64 -d > "$dir/ic_launcher.png"
+            echo "$ICON_B64" | base64 -d > "$dir/ic_launcher_round.png"
+          done
+          # 刪除 adaptive-icon XML 文件
+          rm -f android/app/src/main/res/mipmap-hdpi/ic_launcher.xml
+          rm -f android/app/src/main/res/mipmap-hdpi/ic_launcher_round.xml
+          rm -f android/app/src/main/res/drawable/ic_launcher_foreground.xml
+          echo "Icons fixed"
+
+      - name: Fix AndroidManifest roundIcon
+        run: |
+          sed -i 's|android:roundIcon="@mipmap/ic_launcher_round"||g' android/app/src/main/AndroidManifest.xml
+          echo "Manifest fixed"
+
       - name: Install dependencies
         run: flutter pub get
 
