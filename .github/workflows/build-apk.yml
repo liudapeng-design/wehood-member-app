@@ -27,16 +27,17 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Flutter version
-        run: flutter --version
-
       - name: Create placeholder assets
         run: |
           mkdir -p assets/images assets/icons
-          python3 -c "import struct,zlib; f=open('assets/images/logo.png','wb'); sig=b'\x89PNG\r\n\x1a\n'; def c(n,d): r=struct.pack('>I',len(d))+n+d; return r+struct.pack('>I',zlib.crc32(r[4:])&0xffffffff); f.write(sig+c(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+c(b'IDAT',zlib.compress(b'\x00\xff\x80\x00'))+c(b'IEND',b'')); f.close(); print('done')"
+          echo "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" | base64 -d > assets/images/logo.png
+          echo "Assets created"
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze --no-fatal-infos || true
 
       - name: Build Debug APK
         run: flutter build apk --debug --no-tree-shake-icons
@@ -57,3 +58,8 @@ jobs:
           name: wehood-member-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
+
+      - name: Show APK info
+        run: |
+          echo "=== Build Complete ==="
+          ls -lh build/app/outputs/flutter-apk/*.apk
