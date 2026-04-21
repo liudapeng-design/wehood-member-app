@@ -1,43 +1,43 @@
 name: Build Android APK
 on:
   push:
-      branches: [ main, master ]
-        workflow_dispatch:
-        jobs:
-          build:
-              runs-on: ubuntu-latest
-                  steps:
-                        - uses: actions/checkout@v4
-                              - uses: actions/setup-java@v4
-                                      with:
-                                                distribution: temurin
-                                                          java-version: '17'
-                                                                - uses: subosito/flutter-action@v2
-                                                                        with:
-                                                                                  flutter-version: '3.22.0'
-                                                                                            channel: stable
-                                                                                                      cache: true
-                                                                                                            - name: Remove custom mipmap and use Flutter defaults
-                                                                                                                    run: |
-                                                                                                                              rm -rf android/app/src/main/res/mipmap-hdpi
-                                                                                                                                        rm -rf android/app/src/main/res/mipmap-mdpi
-                                                                                                                                                  rm -rf android/app/src/main/res/mipmap-xhdpi
-                                                                                                                                                            rm -rf android/app/src/main/res/mipmap-xxhdpi
-                                                                                                                                                                      rm -rf android/app/src/main/res/mipmap-xxxhdpi
-                                                                                                                                                                                mkdir -p assets/images assets/icons
-                                                                                                                                                                                          echo done
-                                                                                                                                                                                                - run: flutter pub get
-                                                                                                                                                                                                      - name: Build Release APK
-                                                                                                                                                                                                              run: flutter build apk --release --no-tree-shake-icons
-                                                                                                                                                                                                                    - name: Build Debug APK
-                                                                                                                                                                                                                            run: flutter build apk --debug --no-tree-shake-icons
-                                                                                                                                                                                                                                  - uses: actions/upload-artifact@v4
-                                                                                                                                                                                                                                          with:
-                                                                                                                                                                                                                                                    name: wehood-member-release-apk
-                                                                                                                                                                                                                                                              path: build/app/outputs/flutter-apk/app-release.apk
-                                                                                                                                                                                                                                                                        retention-days: 30
-                                                                                                                                                                                                                                                                              - uses: actions/upload-artifact@v4
-                                                                                                                                                                                                                                                                                      with:
-                                                                                                                                                                                                                                                                                                name: wehood-member-debug-apk
-                                                                                                                                                                                                                                                                                                          path: build/app/outputs/flutter-apk/app-debug.apk
-                                                                                                                                                                                                                                                                                                                    retention-days: 30
+    branches: [ main, master ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+          channel: stable
+          cache: true
+      - name: Remove custom mipmap dirs
+        run: |
+          rm -rf android/app/src/main/res/mipmap-hdpi
+          rm -rf android/app/src/main/res/mipmap-mdpi
+          rm -rf android/app/src/main/res/mipmap-xhdpi
+          rm -rf android/app/src/main/res/mipmap-xxhdpi
+          rm -rf android/app/src/main/res/mipmap-xxxhdpi
+          mkdir -p assets/images assets/icons
+          echo "cleanup done"
+      - run: flutter pub get
+      - name: Build Release APK
+        run: flutter build apk --release --no-tree-shake-icons
+      - name: Build Debug APK
+        run: flutter build apk --debug --no-tree-shake-icons
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wehood-member-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wehood-member-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 30
