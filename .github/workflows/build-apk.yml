@@ -23,9 +23,17 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.22.0
+          flutter-version: 3.19.6
           channel: stable
           cache: true
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Create placeholder assets
+        run: |
+          mkdir -p assets/images assets/icons
+          python3 -c "import struct,zlib; f=open('assets/images/logo.png','wb'); sig=b'\x89PNG\r\n\x1a\n'; def c(n,d): r=struct.pack('>I',len(d))+n+d; return r+struct.pack('>I',zlib.crc32(r[4:])&0xffffffff); f.write(sig+c(b'IHDR',struct.pack('>IIBBBBB',1,1,8,2,0,0,0))+c(b'IDAT',zlib.compress(b'\x00\xff\x80\x00'))+c(b'IEND',b'')); f.close(); print('done')"
 
       - name: Install dependencies
         run: flutter pub get
