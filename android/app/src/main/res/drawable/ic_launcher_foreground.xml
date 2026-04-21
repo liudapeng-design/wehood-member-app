@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 白色圓形背景 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,54m-46,0a46,46 0,1 1,92 0a46,46 0,1 1,-92 0" />
+
+    <!-- 字母 D（DEEPSEE 首字母） -->
+    <path
+        android:fillColor="#E8821A"
+        android:pathData="M36,30 L36,78 L54,78 C66,78 74,70 74,54 C74,38 66,30 54,30 Z
+                          M44,38 L52,38 C60,38 66,44 66,54 C66,64 60,70 52,70 L44,70 Z" />
+
+    <!-- 眼睛圖案（睇） -->
+    <ellipse
+        android:fillColor="#E8821A"
+        android:cx="54"
+        android:cy="54"
+        android:rx="8"
+        android:ry="5" />
+    <circle
+        android:fillColor="#FFFFFF"
+        android:cx="54"
+        android:cy="54"
+        android:r="2.5" />
+</vector>
