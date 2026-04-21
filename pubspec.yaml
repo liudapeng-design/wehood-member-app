@@ -15,7 +15,7 @@ dependencies:
   webview_flutter_android: ^3.16.0
   connectivity_plus: ^6.0.3
   flutter_local_notifications: ^17.2.2
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.2.3
   url_launcher: ^6.3.0
   package_info_plus: ^8.0.2
 
